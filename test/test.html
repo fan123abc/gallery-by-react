@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div id="container">
+		<div id="parent" class="demo">
+			<div class="bottom">bottom</div>
+			<div class="top">top</div>
+		</div>
+	</div>	
+	<style type="text/css">
+	#container{
+		margin: 100px auto;
+		perspective:1000px;
+		position: relative;
+		border: 1px solid blue;
+		width: 400px;
+		height: 400px;
+	}
+	#parent{
+		width: 400px;
+		height: 400px;
+		text-align: center;
+		font-size: 30px;
+		line-height: 200px;
+		
+	}
+	#parent div{
+		background-color: #fff;
+		position: absolute;
+		border: 1px solid #000;
+		width: 400px;
+		height: 400px;
+		float: left;
+		transition: 0.6s;
+	}
+	#parent div.top.test{
+		transform: rotateY(180deg);
+		z-index: -1;
+	}
+
+	</style>
+</body>
+</html>

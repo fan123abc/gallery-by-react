@@ -44,8 +44,8 @@ var ImgFigure = React.createClass({
 		/*ImgFigures的state的值  此处少了一个判断条件，把第一个居中的图片也加了行内样式，导致样式表的样式无法起作用，查了好久
 		原因在于，不理解这里的render是每张图片都要走一次的*/
 		if (this.props.arrange.rotate) {
-				['-moz-', '-ms-', '-webkit-', ''].forEach(function(value){
-				styleObj[value + 'transform'] = 'rotate(' + this.props.arrange.rotate + 'deg)';
+				['MozTransform', 'msTransform', 'WebkitTransform', 'transform'].forEach(function(value){
+				styleObj[value] = 'rotate(' + this.props.arrange.rotate + 'deg)';
 			}.bind(this));
 		}else{
 			styleObj.zIndex = 11;
@@ -55,8 +55,7 @@ var ImgFigure = React.createClass({
 		imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : ' ';/*此处注意空格*/
 		return (
 			<figure className={imgFigureClassName} onClick={this.handleClick} style={styleObj}>
-				<img src={this.props.data.imageURL} alt={this.props.data.title}
-				/>
+				<img src={this.props.data.imageURL} alt={this.props.data.title} />
 				<figcaption>
 					<h2 className="img-title">{this.props.data.title}</h2>
 					<div className="img-back" onClick={this.handleClick}>
@@ -66,6 +65,30 @@ var ImgFigure = React.createClass({
 					</div>
 				</figcaption>
 			</figure>
+			);
+	}
+});
+/*控制组件*/
+var ControllerUnit = React.createClass({
+	handleClick: function(e){
+		if (this.props.arrange.isCenter) {
+			this.props.inverse();
+		}else{
+			this.props.center();
+		}
+		e.preventDefault();
+		e.stopPropagation();
+	},
+	render: function(){
+		var className = 'controller-unit';
+		if (this.props.arrange.isCenter) {
+		className += ' is-center';
+			if (this.props.arrange.isInverse){
+				className += ' is-inverse';
+			}
+		}
+		return (
+			<span className={className} onClick={this.handleClick}></span>
 			);
 	}
 });
@@ -245,7 +268,8 @@ render: function() {
 				isCenter: false
 			};
 		}
-		ImgFigures.push(<ImgFigure data={value} ref = {'ImgFigure' + index} center = {this.center(index)} inverse = {this.inverse(index)} arrange = {this.state.imgsArrangeArr[index]} />);
+		ImgFigures.push(<ImgFigure data={value} ref = {'ImgFigure' + index} key={index} center = {this.center(index)} inverse = {this.inverse(index)} arrange = {this.state.imgsArrangeArr[index]} />);
+		controllerUnits.push(<ControllerUnit arrange = {this.state.imgsArrangeArr[index]} key={index} center = {this.center(index)} inverse = {this.inverse(index)} />);
 	}.bind(this));
     return (
       <section className="stage" ref="stage">
